@@ -31,8 +31,5 @@
     "src/**/*.{js}": [
       "eslint --fix"
     ]
-  },
-  "dependencies": {
-    "discord.js": "^14.13.0"
   }
 }
