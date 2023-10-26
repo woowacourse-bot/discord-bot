@@ -2,8 +2,8 @@ import { REST, Routes, Client, GatewayIntentBits } from 'discord.js';
 
 const commands = [
   {
-    name: 'ping',
-    description: 'Replies with Pong!',
+    name: 'developer',
+    description: 'Discord-bot Github Repository',
   },
 ];
 
@@ -30,9 +30,8 @@ client.on('ready', () => {
 client.on('interactionCreate', async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
-  console.log(interaction);
-  if (interaction.commandName === 'ping') {
-    await interaction.reply('Pong!');
+  if (interaction.commandName === 'developer') {
+    await interaction.reply('https://github.com/woowacourse-bot/discord-bot');
   }
 });
 
