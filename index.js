@@ -7,11 +7,13 @@ const commands = [
   },
 ];
 
+// DISCORD 내 BOT TOKEN을 setToken의 인수로 넣어주세요.
 const rest = new REST({ version: '10' }).setToken('TOKEN');
 
 try {
   console.log('Started refreshing application (/) commands.');
 
+  // SETTINGS - General Information - APPLICATION ID를 applicationCommands의 인수로 넣어주세요.
   await rest.put(Routes.applicationCommands('APP_ID'), { body: commands });
 
   console.log('Successfully reloaded application (/) commands.');
@@ -59,4 +61,5 @@ client.on('channelCreate', async (channel) => {
   }
 });
 
+// DISCORD 내 BOT TOKEN을 setToken의 인수로 넣어주세요.
 client.login('TOKEN');
