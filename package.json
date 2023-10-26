@@ -2,8 +2,8 @@
   "name": "discord-bot",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install"
@@ -31,5 +31,8 @@
     "src/**/*.{js}": [
       "eslint --fix"
     ]
+  },
+  "dependencies": {
+    "discord.js": "^14.13.0"
   }
 }
