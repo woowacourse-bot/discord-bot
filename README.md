@@ -77,7 +77,7 @@ client.login('실제 토큰');
 **프로젝트를 실행합니다.**
 
 ```bash
-node index.js
+npm run start
 ```
 
 **정상 실행시 접속 커맨드가 콘솔에 나타납니다.**
