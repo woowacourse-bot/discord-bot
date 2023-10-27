@@ -1,20 +1,30 @@
 {
   "name": "discord-bot",
   "version": "1.0.0",
-  "description": "",
+  "description": "An open-source, Discord bot for managing channels built using discord.js",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "start": "node ."
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/woowacourse-bot/discord-bot.git"
   },
+  "engines": {
+    "node": "=>18.17.1"
+  },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "keywords": [
+    "discord",
+    "discord.js",
+    "discord-bot",
+    "bot"
+  ],
   "bugs": {
     "url": "https://github.com/woowacourse-bot/discord-bot/issues"
   },
