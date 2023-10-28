@@ -74,7 +74,6 @@ client.on('ready', () => {
 });
 
 client.on('interactionCreate', async (interaction) => {
-  console.log(interaction);
   if (!interaction.isChatInputCommand()) return;
   if (interaction.commandName === 'developer') {
     await interaction.reply('https://github.com/woowacourse-bot/discord-bot');
