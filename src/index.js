@@ -14,7 +14,7 @@ try {
   console.log('Started refreshing application (/) commands.');
 
   // SETTINGS - General Information - APPLICATION ID를 applicationCommands의 인수로 넣어주세요.
-  await rest.put(Routes.applicationCommands('1167009894629642240'), { body: commands });
+  await rest.put(Routes.applicationCommands(process.env.APP_ID), { body: commands });
 
   console.log('Successfully reloaded application (/) commands.');
 } catch (error) {
