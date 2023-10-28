@@ -8,9 +8,7 @@ const commands = [
 ];
 
 // DISCORD 내 BOT TOKEN을 setToken의 인수로 넣어주세요.
-const rest = new REST({ version: '10' }).setToken(
-  'MTE2NzAwOTg5NDYyOTY0MjI0MA.GKQMQB.admxtnIneFT5gY6aFB0lbmumKuw6bzdvH0uyAg',
-);
+const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 
 try {
   console.log('Started refreshing application (/) commands.');
@@ -29,7 +27,7 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
   try {
     // '스스로 만들기' 카테고리의 ID를 확인합니다.
-    const guild = client.guilds.cache.get('1161502357633380475'); // 해당 서버의 ID를 넣어야 합니다.
+    const guild = client.guilds.cache.get(process.env.APP_ID); // 해당 서버의 ID를 넣어야 합니다.
     const category = guild.channels.cache.find((ch) => ch.name === '스스로 만들기');
     if (!category) {
       console.error("Category '스스로 만들기' not found.");
@@ -108,4 +106,4 @@ client.on('channelCreate', async (channel) => {
   }
 });
 // DISCORD 내 BOT TOKEN을 setToken의 인수로 넣어주세요.
-client.login('MTE2NzAwOTg5NDYyOTY0MjI0MA.GKQMQB.admxtnIneFT5gY6aFB0lbmumKuw6bzdvH0uyAg');
+client.login(process.env.DISCORD_TOKEN);
