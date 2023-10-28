@@ -2,12 +2,12 @@
   "name": "discord-bot",
   "version": "1.0.0",
   "description": "An open-source, Discord bot for managing channels built using discord.js",
-  "main": "index.js",
+  "main": "./src/index.js",
   "type": "module",
   "scripts": {
+    "start": "node .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky install",
-    "start": "node ."
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -43,6 +43,7 @@
     ]
   },
   "dependencies": {
-    "discord.js": "^14.13.0"
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1"
   }
 }

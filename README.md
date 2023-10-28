@@ -27,9 +27,9 @@
 
 ## 디스코드 봇 퍼미션 설정
 
-**`OAuth2` 항목에 `URL Genarator`에서 `Scopes`의 `Bot`을 체크한 후 `Bot Permissions`에서 `Manage Channels`를 체크 한 후 생성된 url에 접속합니다.**
+**`OAuth2` 항목에 `URL Generator`에서 `Scopes`의 `Bot`을 체크한 후 `Bot Permissions`에서 `Administrator`를 체크 한 후 생성된 url에 접속합니다.**
 
-<img width="600" alt="image" src="https://github.com/woowacourse-bot/discord-bot/assets/99083803/c0ba0f13-ca96-40e2-83bc-a3d662502548">
+<img width="600" alt="image" src="https://github.com/cobocho/discord-bot/assets/99083803/7a513c30-60f6-492d-ac5f-123a7dc7f023">
 
 **접속한 페이지에서 채널 관리 봇을 입장시킬 채널을 선택합니다.**
 
@@ -53,31 +53,14 @@ npm install
 
 ## 토큰 및 APP_ID 적용
 
-`index.js`에 `TOKEN`과 `APP_ID`를 채널 관리 봇의 토큰과 APP_ID로 수정합니다.
-
-```js
-//...
-
-// DISCORD 내 BOT TOKEN을 setToken의 인수로 넣어주세요.
-const rest = new REST({ version: '10' }).setToken('실제 토큰');
-
-//...
-
-// SETTINGS - General Information - APPLICATION ID를 applicationCommands의 인수로 넣어주세요.
-await rest.put(Routes.applicationCommands('실제 APP_ID'), { body: commands });
-
-//...
-
-// DISCORD 내 BOT TOKEN을 setToken의 인수로 넣어주세요.
-client.login('실제 토큰');
-```
+`.env`에 `TOKEN`, `APP_ID`, `PUBLIC_KEY`를 채널 관리 봇의 토큰과 APP_ID, PUBLIC_KEY로 수정합니다.
 
 ## 디스코드 봇 실행
 
 **프로젝트를 실행합니다.**
 
 ```bash
-npm run start
+npm start
 ```
 
 **정상 실행시 접속 커맨드가 콘솔에 나타납니다.**
