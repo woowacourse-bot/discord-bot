@@ -1,6 +1,6 @@
 import { REST, Routes, Client, GatewayIntentBits } from 'discord.js';
 import 'dotenv/config';
-
+// for Refactor
 const commands = [
   {
     name: 'developer',
@@ -105,5 +105,6 @@ client.on('channelCreate', async (channel) => {
     console.error('Error setting permissions:', error);
   }
 });
+
 // DISCORD 내 BOT TOKEN을 setToken의 인수로 넣어주세요.
 client.login(process.env.DISCORD_TOKEN);
