@@ -7,7 +7,7 @@ const commands = [
     description: 'Discord-bot Github Repository',
   },
 ];
-
+// refactor
 // DISCORD 내 BOT TOKEN을 setToken의 인수로 넣어주세요.
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 
@@ -24,6 +24,7 @@ try {
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
+// refactor
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
   try {
@@ -37,7 +38,7 @@ client.on('ready', () => {
 
     // '스스로 만들기' 카테고리에 속한 채널들을 가져옵니다.
     const channelsInCategory = guild.channels.cache.filter((ch) => ch.parentId === category.id);
-
+    // refactor
     // 각 채널에 권한을 설정합니다.
     channelsInCategory.forEach(async (channel) => {
       try {
@@ -73,14 +74,14 @@ client.on('ready', () => {
     console.error('Error setting permissions for channels in category:', error);
   }
 });
-
+// refactor
 client.on('interactionCreate', async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
   if (interaction.commandName === 'developer') {
     await interaction.reply('https://github.com/woowacourse-bot/discord-bot');
   }
 });
-
+// refactor
 client.on('channelCreate', async (channel) => {
   try {
     // 채널을 만든 사용자의 정보를 가져옵니다.
