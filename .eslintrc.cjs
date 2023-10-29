@@ -19,15 +19,4 @@ module.exports = {
     // dotenv/config import 관련 오류 침묵
     'import/no-extraneous-dependencies': 'off',
   },
-  overrides: [
-    {
-      files: ['__tests__/**/*.js', 'src/utils/validator/utils/**/*.js'],
-      rules: {
-        'max-lines-per-function': 'off',
-        'no-new': 'off',
-        'no-undef': 'off',
-        'arrow-body-style': 'off',
-      },
-    },
-  ],
 };
