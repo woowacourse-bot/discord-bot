@@ -1,4 +1,5 @@
 import { REST, Routes, Client, GatewayIntentBits } from 'discord.js';
+import 'dotenv/config';
 
 const commands = [
   {

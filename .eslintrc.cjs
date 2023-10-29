@@ -16,17 +16,7 @@ module.exports = {
     'jsdoc/require-param-description': 'off',
     'jsdoc/require-returns-description': 'off',
 
-    'import/export': 0,
+    // dotenv/config import 관련 오류 침묵
+    'import/no-extraneous-dependencies': 'off',
   },
-  overrides: [
-    {
-      files: ['__tests__/**/*.js', 'src/utils/validator/utils/**/*.js'],
-      rules: {
-        'max-lines-per-function': 'off',
-        'no-new': 'off',
-        'no-undef': 'off',
-        'arrow-body-style': 'off',
-      },
-    },
-  ],
 };
