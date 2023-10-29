@@ -17,6 +17,9 @@ module.exports = {
     'jsdoc/require-returns-description': 'off',
 
     'import/export': 0,
+
+    // dotenv.config import를 위한 오류 침묵
+    'import/no-extraneous-dependencies': 'off',
   },
   overrides: [
     {
