@@ -1,8 +1,8 @@
 import { REST, Routes, Client, GatewayIntentBits } from 'discord.js';
 import 'dotenv/config';
 import readyPermissions from './handlers/channel/readyPermissions.js';
-import channelCreatePermissions from './handlers/channel/channelCreatePermissions.js';
 import about from './interactions/command/about.js';
+import channelCreatePermissions from './event/channel/channelCreatePermissions.js';
 
 const commands = [
   {
