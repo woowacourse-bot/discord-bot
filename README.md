@@ -21,10 +21,6 @@
 
 <img width="600" alt="image" src="https://github.com/woowacourse-bot/discord-bot/assets/99083803/9e8ee0c0-8a65-43e9-b4cd-94f11f26b87f">
 
-**`Settings` 항목에 `Bot`에서 `Reset token`을 눌러 토큰을 생성 후 복사합니다.**
-
-<img width="600" alt="image" src="https://github.com/woowacourse-bot/discord-bot/assets/99083803/02ec46a4-465e-47c1-85b6-5e6667ad5ef4">
-
 ## 디스코드 봇 퍼미션 설정
 
 **`OAuth2` 항목에 `URL Generator`에서 `Scopes`의 `Bot`을 체크한 후 `Bot Permissions`에서 `Administrator`를 체크 한 후 생성된 url에 접속합니다.**
@@ -51,9 +47,23 @@ cd discord-bot
 npm install
 ```
 
-## 토큰 및 APP_ID 적용
+## 환경변수 적용
 
-`.env`에 `TOKEN`, `APP_ID`, `PUBLIC_KEY`를 채널 관리 봇의 토큰과 APP_ID, PUBLIC_KEY로 수정합니다.
+**디스코드의 사용자 설정에서 개발자 모드를 작동시킵니다.**
+
+<img width="600" alt="image" src="https://github.com/cobocho/discord-bot/assets/99083803/1c1d0bf6-e40f-4da9-a167-c3423228f9ef">
+
+**적용시킬 서버의 서버 ID를 복사한 후 환경변수의 `SERVER_ID`에 적용시킵니다.**
+
+<img width="227" alt="image" src="https://github.com/cobocho/discord-bot/assets/99083803/804f357d-f9ad-49a2-87a3-24581869fd45">
+
+**디스코드 봇 페이지의 OAuth2의 General에서 클라이언트 ID를 복사한 후 환경변수의 `CLIENT_ID`에 적용시킵니다.**
+
+<img width="400" alt="image" src="https://github.com/cobocho/discord-bot/assets/99083803/8d1afce5-45fe-4d18-ae04-1a20c6c07e08">
+
+**디스코드 봇 페이지의 Bot에서 Reset token을 눌러 토큰을 생성 후 환경변수의 `DISCORD_TOKEN`에 적용시킵니다.**
+
+<img width="600" alt="image" src="https://github.com/woowacourse-bot/discord-bot/assets/99083803/02ec46a4-465e-47c1-85b6-5e6667ad5ef4">
 
 ## 디스코드 봇 실행
 
