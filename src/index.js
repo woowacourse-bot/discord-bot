@@ -1,4 +1,4 @@
-import { REST, Routes, Client, GatewayIntentBits } from 'discord.js';
+import { REST, Routes, Client, GatewayIntentBits, Events } from 'discord.js';
 import 'dotenv/config';
 import readyPermissions from './handlers/channel/readyPermissions.js';
 import about from './interactions/command/about.js';
@@ -25,13 +25,13 @@ try {
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-client.on('ready', async () => {
+client.on(Events.ClientReady, async () => {
   await readyPermissions(client);
 });
 
-client.on('interactionCreate', about);
+client.on(Events.InteractionCreate, about);
 
-client.on('channelCreate', async (channel) => {
+client.on(Events.ChannelCreate, async (channel) => {
   await channelCreatePermissions(channel, client);
 });
 
