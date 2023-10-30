@@ -93,17 +93,17 @@ Logged in as 채널 관리 봇#0022!
 
 <img width="300" alt="image" src="https://github.com/cobocho/discord-bot/assets/99083803/a8489cc4-f8a7-428d-99e9-f3a9ec42da87">
 
-# 📚 Reference
+### Reference
 
-### 채널 생성 감지
+#### 채널 생성 감지
 
 - [[Discord.js] Event.ChannelCreate](https://old.discordjs.dev/#/docs/discord.js/main/typedef/Events)
 
-### 채널 정보 가져오기
+#### 채널 정보 가져오기
 
 - [[Discord.js] Fetch AuditLogs](https://old.discordjs.dev/#/docs/discord.js/main/class/Guild?scrollTo=fetchAuditLogs)
 
-### 권한 부여
+#### 권한 부여
 
 - [[Discord.js] Role Manager](https://old.discordjs.dev/#/docs/discord.js/main/class/RoleManager)
 - [[Discord.js] Permissions](https://discordjs.guide/popular-topics/permissions.html#adding-overwrites)
