@@ -25,10 +25,14 @@ try {
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-client.on('ready', readyPermissions);
+client.on('ready', async () => {
+  await readyPermissions(client);
+});
 
 client.on('interactionCreate', about);
 
-client.on('channelCreate', channelCreatePermissions);
+client.on('channelCreate', async (channel) => {
+  await channelCreatePermissions(channel, client);
+});
 
 client.login(process.env.DISCORD_TOKEN);
