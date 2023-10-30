@@ -2,6 +2,7 @@ import { REST, Routes, Client, GatewayIntentBits } from 'discord.js';
 import 'dotenv/config';
 import readyPermissions from './handlers/channel/readyPermissions.js';
 import channelCreatePermissions from './handlers/channel/channelCreatePermissions.js';
+import about from './interactions/command/about.js';
 
 // for Refactor
 const commands = [
@@ -32,10 +33,7 @@ client.on('ready', async () => {
 });
 // refactor
 client.on('interactionCreate', async (interaction) => {
-  if (!interaction.isChatInputCommand()) return;
-  if (interaction.commandName === 'developer') {
-    await interaction.reply('https://github.com/woowacourse-bot/discord-bot');
-  }
+  await about(interaction);
 });
 // refactor
 client.on('channelCreate', async (channel) => {
