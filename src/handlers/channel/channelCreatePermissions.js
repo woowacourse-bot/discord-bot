@@ -1,5 +1,11 @@
-const channelCreatePermissions = async (channel) => {
+const channelCreatePermissions = async (channel, client) => {
   try {
+    const guild = client.guilds.cache.get(process.env.SERVER_ID);
+    const category = guild.channels.cache.find((ch) => ch.name === '스스로 만들기');
+    if (channel.parentId !== category.id) {
+      return;
+    }
+
     // 채널을 만든 사용자의 정보를 가져옵니다.
     const logs = await channel.guild.fetchAuditLogs({
       limit: 1,
