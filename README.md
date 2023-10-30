@@ -83,9 +83,15 @@ Logged in as 채널 관리 봇#0022!
 
 ## 채널 관리
 
-**디스코드 봇이 작동 중인 상태에서는 채널에 대한 삭제 및 수정 권한은 어드민과 채널 생성자에게만 권한이 부여됩니다.**
+**디스코드 봇이 작동 중인 상태에서는 스스로 만들기 채널에 대한 삭제 및 수정 권한은 어드민과 채널 생성자에게만 권한이 부여됩니다.**
 
-<img width="300" alt="image" src="https://github.com/woowacourse-bot/discord-bot/assets/99083803/1d85c623-dc6d-4176-82c2-a626c02a88a2">
+`ex) 본인 생성 채널`
+
+<img width="300" alt="image" src="https://github.com/cobocho/discord-bot/assets/99083803/df9b19bc-eef3-4a8a-ba50-a8e234c38ad5">
+
+`ex) 타인 생성 채널`
+
+<img width="300" alt="image" src="https://github.com/cobocho/discord-bot/assets/99083803/a8489cc4-f8a7-428d-99e9-f3a9ec42da87">
 
 # 📚 Reference
 
