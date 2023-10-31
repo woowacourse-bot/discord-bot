@@ -1,22 +1,30 @@
 const channelCreatePermissions = async (channel, client) => {
   try {
-    const guild = client.guilds.cache.get(process.env.SERVER_ID);
-    const category = guild.channels.cache.find((ch) => ch.name === '스스로 만들기');
-    if (channel.parentId !== category.id) {
-      console.log(`스스로 만들기가 아닌 채널 생성됨. (채널명: ${channel.name}) ${new Date()}`);
-      return;
-    }
-
-    console.log(`스스로 만들기에 채널 생성됨. (채널명: ${channel.name}) ${new Date()}`);
-
     // 채널을 만든 사용자의 정보를 가져옵니다.
     const logs = await channel.guild.fetchAuditLogs({
       limit: 1,
       type: 10,
     });
 
+    const guild = client.guilds.cache.get(process.env.SERVER_ID);
+    const category = guild.channels.cache.find((ch) => ch.name === '스스로 만들기');
+
     const creatorId = logs.entries.first().executor.id;
+    const creatorNickname = logs.entries.first().executor.displayName;
     const creator = await channel.guild.members.fetch(creatorId);
+
+    if (channel.parentId !== category.id) {
+      console.log(`\n스스로 만들기가 아닌 채널 생성됨.`);
+      console.log(`채널명: ${channel.name}`);
+      console.log(`생성 유저: ${creatorNickname}`);
+      console.log(`생성 시각: ${new Date()}`);
+      return;
+    }
+
+    console.log(`\n스스로 만들기 채널 생성됨.`);
+    console.log(`채널명: ${channel.name}`);
+    console.log(`생성 유저: ${creatorNickname}`);
+    console.log(`생성 시각: ${new Date()}`);
 
     // 생성자에게만 'MANAGE_CHANNELS' 권한 부여
     await channel.permissionOverwrites.edit(creator.id, {
@@ -28,7 +36,9 @@ const channelCreatePermissions = async (channel, client) => {
       ManageChannels: false,
     });
 
-    console.log(`권한 수정 완료됨. (채널명: ${channel.name}) ${new Date()}`);
+    console.log(`\n권한 수정 완료됨.`);
+    console.log(`권한 수정 채널명: ${channel.name}`);
+    console.log(`수정 시각: ${new Date()}`);
   } catch (error) {
     console.error('Error setting permissions:', error);
   }
