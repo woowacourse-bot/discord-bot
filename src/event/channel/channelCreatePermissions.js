@@ -7,7 +7,7 @@ const channelCreatePermissions = async (channel, client) => {
       return;
     }
 
-    console.log(`스스로 만들기에 채널 생성됨. (채널명: ${channel.name} ${new Date()}`);
+    console.log(`스스로 만들기에 채널 생성됨. (채널명: ${channel.name}) ${new Date()}`);
 
     // 채널을 만든 사용자의 정보를 가져옵니다.
     const logs = await channel.guild.fetchAuditLogs({
@@ -28,7 +28,7 @@ const channelCreatePermissions = async (channel, client) => {
       ManageChannels: false,
     });
 
-    console.log(`권한 수정 완료됨. (채널명: ${channel.name} ${new Date()}`);
+    console.log(`권한 수정 완료됨. (채널명: ${channel.name}) ${new Date()}`);
   } catch (error) {
     console.error('Error setting permissions:', error);
   }
