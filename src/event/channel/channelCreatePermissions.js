@@ -7,13 +7,15 @@ const channelCreatePermissions = async (channel, client) => {
     });
 
     const guild = client.guilds.cache.get(process.env.SERVER_ID);
-    const category = guild.channels.cache.find((ch) => ch.name === '스스로 만들기');
+    const limitedCategoriesIds = guild.channels.cache
+      .filter((ch) => ch.name.includes('스스로 만들기'))
+      .map((category) => category.id);
 
     const creatorId = logs.entries.first().executor.id;
     const creatorNickname = logs.entries.first().executor.displayName;
     const creator = await channel.guild.members.fetch(creatorId);
 
-    if (channel.parentId !== category.id) {
+    if (!limitedCategoriesIds.includes(channel.parentId)) {
       console.log(`\n스스로 만들기가 아닌 채널 생성됨.`);
       console.log(`채널명: ${channel.name}`);
       console.log(`생성 유저: ${creatorNickname}`);
