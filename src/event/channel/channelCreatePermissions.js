@@ -11,8 +11,7 @@ const channelCreatePermissions = async (channel, client) => {
       .filter((ch) => ch.name.includes('스스로 만들기'))
       .map((category) => category.id);
 
-    const creatorId = logs.entries.first().executor.id;
-    const creatorNickname = logs.entries.first().executor.displayName;
+    const { id: creatorId, displayName: creatorNickname } = logs.entries.first().executor;
     const creator = await channel.guild.members.fetch(creatorId);
 
     if (!limitedCategoriesIds.includes(channel.parentId)) {
