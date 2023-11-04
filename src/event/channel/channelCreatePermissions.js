@@ -8,7 +8,7 @@ const channelCreatePermissions = async (channel, client) => {
 
     const guild = client.guilds.cache.get(process.env.SERVER_ID);
     const limitedCategoriesIds = guild.channels.cache
-      .filter((ch) => ch.name.includes('스스로 만들기'))
+      .filter((category) => category.name.includes('스스로 만들기'))
       .map((category) => category.id);
 
     const { id: creatorId, displayName: creatorNickname } = logs.entries.first().executor;

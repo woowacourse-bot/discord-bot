@@ -6,7 +6,7 @@ const readyPermissions = async (client) => {
     const guild = client.guilds.cache.get(process.env.SERVER_ID); // 해당 서버의 ID를 넣어야 합니다.
 
     const limitedCategoriesIds = guild.channels.cache
-      .filter((ch) => ch.name.includes('스스로 만들기'))
+      .filter((category) => category.name.includes('스스로 만들기'))
       .map((category) => category.id);
 
     if (!limitedCategoriesIds) {
