@@ -1,16 +1,24 @@
 const readyPermissions = async (client) => {
-  console.log(`Logged in as ${client.user.tag}!`);
+  console.log('채널', `Logged in as ${client.user.tag}!`);
+
   try {
     // '스스로 만들기' 카테고리의 ID를 확인합니다.
     const guild = client.guilds.cache.get(process.env.SERVER_ID); // 해당 서버의 ID를 넣어야 합니다.
-    const category = guild.channels.cache.find((ch) => ch.name === '스스로 만들기');
-    if (!category) {
+
+    const selectedCategoriesIds = guild.channels.cache
+      .filter((category) => category.name.includes('스스로 만들기'))
+      .map((category) => category.id);
+
+    if (!selectedCategoriesIds) {
       console.error("Category '스스로 만들기' not found.");
       return;
     }
 
     // '스스로 만들기' 카테고리에 속한 채널들을 가져옵니다.
-    const channelsInCategory = guild.channels.cache.filter((ch) => ch.parentId === category.id);
+    const channelsInCategory = guild.channels.cache.filter((ch) =>
+      selectedCategoriesIds.includes(ch.parentId),
+    );
+
     // refactor
     // 각 채널에 권한을 설정합니다.
     channelsInCategory.forEach(async (channel) => {
@@ -20,6 +28,7 @@ const readyPermissions = async (client) => {
           limit: 100,
           type: 10,
         });
+
         const channelLog = logs.entries.find((entry) => entry.target.id === channel.id);
         if (!channelLog) {
           // 해당 채널의 생성 로그 항목이 없는 경우
