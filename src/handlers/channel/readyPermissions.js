@@ -5,18 +5,18 @@ const readyPermissions = async (client) => {
     // '스스로 만들기' 카테고리의 ID를 확인합니다.
     const guild = client.guilds.cache.get(process.env.SERVER_ID); // 해당 서버의 ID를 넣어야 합니다.
 
-    const limitedCategoriesIds = guild.channels.cache
+    const selectedCategoriesIds = guild.channels.cache
       .filter((category) => category.name.includes('스스로 만들기'))
       .map((category) => category.id);
 
-    if (!limitedCategoriesIds) {
+    if (!selectedCategoriesIds) {
       console.error("Category '스스로 만들기' not found.");
       return;
     }
 
     // '스스로 만들기' 카테고리에 속한 채널들을 가져옵니다.
     const channelsInCategory = guild.channels.cache.filter((ch) =>
-      limitedCategoriesIds.includes(ch.parentId),
+      selectedCategoriesIds.includes(ch.parentId),
     );
 
     // refactor
