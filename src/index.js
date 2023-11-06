@@ -3,6 +3,7 @@ import 'dotenv/config';
 import readyPermissions from './handlers/channel/readyPermissions.js';
 import about from './interactions/command/about.js';
 import channelCreatePermissions from './event/channel/channelCreatePermissions.js';
+import dice from './event/message/dice.js';
 import ABOUT from './constants/commands.js';
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
@@ -17,7 +18,15 @@ try {
   console.error(error);
 }
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+  ],
+});
+
+client.on(Events.MessageCreate, dice);
 
 client.on(Events.ClientReady, async () => {
   await readyPermissions(client);
