@@ -6,6 +6,11 @@ const createCommand = (message, prefix) => {
   return args.shift().toLowerCase();
 };
 
+const DICE_COMMENT_DATA = Object.freeze({
+  // 특정 숫자에 대한 코멘트를 key & value로 추가합니다.
+  숫자: '코멘트',
+});
+
 const dice = (message) => {
   // 메시지가 봇의 메시지이거나 접두사를 가지고 있지 않으면 무시
   if (message.author.bot || !message.content.startsWith(MESSAGE_PREFIX)) return;
@@ -19,7 +24,11 @@ const dice = (message) => {
     const randomNumber = Math.floor(Math.random() * DICE_NUMBER_RANGE.max) + DICE_NUMBER_RANGE.min;
 
     // 결과를 메시지로 보냄
-    message.reply(`주사위 결과: ${randomNumber}`);
+    message.reply(
+      `${
+        DICE_COMMENT_DATA[randomNumber] ?? '열심히 굴렸습니다'
+      } 주사위가 ${randomNumber} 나왔습니다.`,
+    );
   }
 };
 
