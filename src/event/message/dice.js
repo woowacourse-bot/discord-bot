@@ -20,9 +20,7 @@ const dice = (message) => {
 
     // 결과를 메시지로 보냄
     message.reply(
-      `${
-        DICE_COMMENT_DATA[randomNumber] ?? '열심히 굴렸습니다'
-      } 주사위가 ${randomNumber} 나왔습니다.`,
+      `${DICE_COMMENT_DATA[randomNumber] ?? '축하드립니다.'} 주사위가 ${randomNumber} 나왔습니다.`,
     );
   }
 };
