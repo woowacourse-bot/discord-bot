@@ -21,3 +21,8 @@ export const MISSION_ENGLISH = {
   레이싱: 'racingcar',
   로또: 'lotto',
 };
+
+export const NAME = {
+  minLength: 1,
+  maxLength: 6,
+};

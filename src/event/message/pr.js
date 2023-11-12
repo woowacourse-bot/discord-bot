@@ -1,5 +1,5 @@
 import { MESSAGE_PREFIX } from '../../constants/config.js';
-import { APPLICATION_FIELD, FIELD, MISSION, MISSION_ENGLISH } from '../../constants/pr.js';
+import { APPLICATION_FIELD, FIELD, MISSION, MISSION_ENGLISH, NAME } from '../../constants/pr.js';
 
 const createCommand = (message, prefix) => {
   const args = message.content.slice(prefix.length).trim().split(/ +/);
@@ -19,7 +19,7 @@ const isValidApplicationField = (field) => {
 };
 
 const isValidName = (name) => {
-  const isValidLength = name.length > 1 && name.length < 6;
+  const isValidLength = name.length > NAME.minLength && name.length < NAME.maxLength;
   const koreanPattern = '[^가-힣]';
   const regexp = new RegExp(koreanPattern, 'g');
   const isKorean = !regexp.test(name);
