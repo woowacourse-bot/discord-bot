@@ -14,9 +14,14 @@ const createCommand = (message, prefix) => {
 };
 
 const isValidMission = (command) => {
-  const { lotto, baseball, racingcar } = MISSION;
+  const { lotto, baseball, racingcar, christmas } = MISSION;
 
-  return command.startsWith(lotto) || command.startsWith(baseball) || command.startsWith(racingcar);
+  return (
+    command.startsWith(lotto) ||
+    command.startsWith(baseball) ||
+    command.startsWith(racingcar) ||
+    command.startsWith(christmas)
+  );
 };
 
 const isValidApplicationField = (field) => {
