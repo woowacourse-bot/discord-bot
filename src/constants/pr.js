@@ -26,3 +26,5 @@ export const NAME = {
   minLength: 1,
   maxLength: 6,
 };
+
+export const DELIMITER = ':';

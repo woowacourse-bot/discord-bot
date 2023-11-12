@@ -1,5 +1,12 @@
 import { MESSAGE_PREFIX } from '../../constants/config.js';
-import { APPLICATION_FIELD, FIELD, MISSION, MISSION_ENGLISH, NAME } from '../../constants/pr.js';
+import {
+  APPLICATION_FIELD,
+  DELIMITER,
+  FIELD,
+  MISSION,
+  MISSION_ENGLISH,
+  NAME,
+} from '../../constants/pr.js';
 
 const createCommand = (message, prefix) => {
   const args = message.content.slice(prefix.length).trim().split(/ +/);
@@ -39,7 +46,7 @@ const pr = (message) => {
 
   if (!isValidMission(command)) return;
 
-  const [mission, field, name] = command.split(':');
+  const [mission, field, name] = command.split(DELIMITER);
 
   if (!isValidApplicationField(field)) return;
 
