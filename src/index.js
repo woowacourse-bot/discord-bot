@@ -5,6 +5,7 @@ import about from './interactions/command/about.js';
 import channelCreatePermissions from './event/channel/channelCreatePermissions.js';
 import dice from './event/message/dice.js';
 import ABOUT from './constants/commands.js';
+import pr from './event/message/pr.js';
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 
@@ -26,6 +27,7 @@ const client = new Client({
   ],
 });
 
+client.on(Events.MessageCreate, pr);
 client.on(Events.MessageCreate, dice);
 
 client.on(Events.ClientReady, async () => {
