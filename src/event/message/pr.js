@@ -25,6 +25,9 @@ const isValidApplicationField = (field) => {
   return field === frontend || field === backend || field === android;
 };
 
+const getRepositoryLink = (field, mission) =>
+  `https://github.com/woowacourse-precourse/${FIELD[field]}-${MISSION_ENGLISH[mission]}-6`;
+
 const isValidName = (name) => {
   const isValidLength = name.length > NAME.minLength && name.length < NAME.maxLength;
   const koreanPattern = '[^가-힣]';
@@ -46,9 +49,18 @@ const pr = (message) => {
 
   if (!isValidMission(command)) return;
 
-  const [mission, field, name] = command.split(DELIMITER);
+  const prInfo = command.split(DELIMITER);
+
+  if (prInfo.length > 3) return;
+
+  const [mission, field, name] = prInfo;
 
   if (!isValidApplicationField(field)) return;
+
+  if (!name) {
+    message.reply(getRepositoryLink(field, mission));
+    return;
+  }
 
   if (!isValidName(name)) return;
 
