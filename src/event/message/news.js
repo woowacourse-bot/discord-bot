@@ -3,6 +3,11 @@ import { parseStringPromise } from 'xml2js';
 import { EmbedBuilder } from '@discordjs/builders';
 import { MESSAGE_PREFIX } from '../../constants/config.js';
 import {
+  GEEK_NEWS_AMOUNT,
+  GEEK_NEWS_COMMAND,
+  GEEK_NEWS_THUMBNAIL,
+  GEEK_NEWS_TITLE,
+  GEEK_NEWS_URL,
   NEWS_AMOUNT,
   NEWS_COMMAND,
   NEWS_THUMBNAIL,
@@ -28,6 +33,65 @@ const randomSelect = (array, selectAmount) => {
   return [...randomNumbers].map((number) => array[number]);
 };
 
+const sendNews = (message, result) => {
+  const selectedRandomNews = randomSelect(result.rss.channel[0].item, NEWS_AMOUNT);
+  const date = new Date(result.rss.channel[0].lastBuildDate);
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    weekday: 'long',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    timeZone: 'Asia/Seoul',
+  };
+  const koreanDate = new Intl.DateTimeFormat('ko-KR', options).format(date);
+  const embeds = new EmbedBuilder()
+    .setURL(result.rss.channel[0].link[0])
+    .setThumbnail(NEWS_THUMBNAIL)
+    .setTitle(NEWS_TITLE);
+  const newsList = [];
+
+  selectedRandomNews.forEach((item) => {
+    newsList.push({ name: item.title[0], value: `[링크](${item.link[0]})` });
+  });
+  embeds.addFields(...newsList);
+  embeds.addFields({ name: '업데이트 시간', value: koreanDate });
+
+  message.reply({ embeds: [embeds] });
+};
+
+const sendGeekNews = (message, result) => {
+  const selectedRandomNews = randomSelect(result.feed.entry, GEEK_NEWS_AMOUNT);
+  const date = new Date(result.feed.updated[0]);
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    weekday: 'long',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    timeZone: 'Asia/Seoul',
+  };
+  const koreanDate = new Intl.DateTimeFormat('ko-KR', options).format(date);
+  const embeds = new EmbedBuilder()
+    .setURL('https://news.hada.io/')
+    .setThumbnail(GEEK_NEWS_THUMBNAIL)
+    .setTitle(GEEK_NEWS_TITLE);
+  const newsList = [];
+
+  selectedRandomNews.forEach((item) => {
+    // item.title[0], item.link[0]
+    newsList.push({ name: item.title[0], value: `[링크](${item.link[0].$.href})` });
+  });
+  embeds.addFields(...newsList);
+  embeds.addFields({ name: '업데이트 시간', value: koreanDate });
+
+  message.reply({ embeds: [embeds] });
+};
+
 const news = (message) => {
   if (message.author.bot || !message.content.startsWith(MESSAGE_PREFIX)) return;
 
@@ -39,32 +103,20 @@ const news = (message) => {
       .then((response) => {
         parseStringPromise(response.data)
           .then((result) => {
-            const selectedRandomNews = randomSelect(result.rss.channel[0].item, NEWS_AMOUNT);
-            const date = new Date(result.rss.channel[0].lastBuildDate);
-            const options = {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              weekday: 'long',
-              hour: 'numeric',
-              minute: 'numeric',
-              second: 'numeric',
-              timeZone: 'Asia/Seoul',
-            };
-            const koreanDate = new Intl.DateTimeFormat('ko-KR', options).format(date);
-            const embeds = new EmbedBuilder()
-              .setURL(result.rss.channel[0].link[0])
-              .setThumbnail(NEWS_THUMBNAIL)
-              .setTitle(NEWS_TITLE);
-            const newsList = [];
+            sendNews(message, result);
+          })
+          .catch((error) => console.log(`Failed to parse xml: ${error}`));
+      })
+      .catch((error) => console.log(`Failed to load rss feed: ${error}`));
+  }
 
-            selectedRandomNews.forEach((item) => {
-              newsList.push({ name: item.title[0], value: `[링크](${item.link[0]})` });
-            });
-            embeds.addFields(...newsList);
-            embeds.addFields({ name: '업데이트 시간', value: koreanDate });
-
-            message.reply({ embeds: [embeds] });
+  if (command === GEEK_NEWS_COMMAND) {
+    axios
+      .get(GEEK_NEWS_URL)
+      .then((response) => {
+        parseStringPromise(response.data)
+          .then((result) => {
+            sendGeekNews(message, result);
           })
           .catch((error) => console.log(`Failed to parse xml: ${error}`));
       })
