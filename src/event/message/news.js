@@ -2,7 +2,13 @@ import axios from 'axios';
 import { parseStringPromise } from 'xml2js';
 import { EmbedBuilder } from '@discordjs/builders';
 import { MESSAGE_PREFIX } from '../../constants/config.js';
-import { NEWS_AMOUNT, NEWS_COMMAND, NEWS_THUMBNAIL, NEWS_URL } from '../../constants/news.js';
+import {
+  NEWS_AMOUNT,
+  NEWS_COMMAND,
+  NEWS_THUMBNAIL,
+  NEWS_TITLE,
+  NEWS_URL,
+} from '../../constants/news.js';
 
 const createCommand = (message, prefix) => {
   const args = message.content.slice(prefix.length).trim().split(/ +/);
@@ -49,7 +55,7 @@ const news = (message) => {
             const embeds = new EmbedBuilder()
               .setURL(result.rss.channel[0].link[0])
               .setThumbnail(NEWS_THUMBNAIL)
-              .setTitle('Google 뉴스 - 과학/기술');
+              .setTitle(NEWS_TITLE);
             const newsList = [];
 
             selectedRandomNews.forEach((item) => {

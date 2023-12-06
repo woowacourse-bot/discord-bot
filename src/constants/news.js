@@ -7,3 +7,5 @@ export const NEWS_URL =
 
 export const NEWS_THUMBNAIL =
   'https://github.com/woowacourse-bot/discord-bot/assets/76567238/b1a39f10-358a-4007-952c-022738100636';
+
+export const NEWS_TITLE = 'Google 뉴스 - 과학/기술';
