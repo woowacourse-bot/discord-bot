@@ -6,6 +6,7 @@ import channelCreatePermissions from './event/channel/channelCreatePermissions.j
 import dice from './event/message/dice.js';
 import ABOUT from './constants/commands.js';
 import pr from './event/message/pr.js';
+import news from './event/message/news.js';
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 
@@ -29,6 +30,7 @@ const client = new Client({
 
 client.on(Events.MessageCreate, pr);
 client.on(Events.MessageCreate, dice);
+client.on(Events.MessageCreate, news);
 
 client.on(Events.ClientReady, async () => {
   await readyPermissions(client);
