@@ -13,7 +13,7 @@ const runOnboardingFlow = async (user, memberOrGuild) => {
   // DM에서 메시지 수집을 위한 컬렉터 생성
   const collector = dm.createMessageCollector({
     filter: (m) => m.author.id === user.id,
-    time: 120000, // 총 2분 타임아웃
+    time: 60000, // 총 1분 타임아웃
     max: 2, // 이름 + 이메일 2개
   });
 
@@ -35,7 +35,7 @@ const runOnboardingFlow = async (user, memberOrGuild) => {
       } else if (step === 2) {
         // 모든 답변 수집 완료
         collector.stop();
-        
+
         const [name, email] = answers;
 
         if (!isValidEmail(email)) {
@@ -62,9 +62,12 @@ const runOnboardingFlow = async (user, memberOrGuild) => {
         const roleId = process.env.ONBOARDING_ROLE_ID;
         if (roleId && memberOrGuild) {
           const guild = memberOrGuild.guild || memberOrGuild;
-          const member = memberOrGuild.guild ? memberOrGuild : await guild.members.fetch(user.id).catch(() => null);
+          const member = memberOrGuild.guild
+            ? memberOrGuild
+            : await guild.members.fetch(user.id).catch(() => null);
           if (guild && member) {
-            const role = guild.roles.cache.get(roleId) || await guild.roles.fetch(roleId).catch(() => null);
+            const role =
+              guild.roles.cache.get(roleId) || (await guild.roles.fetch(roleId).catch(() => null));
             if (role) {
               await member.roles.add(role, 'Verified via DM onboarding');
             }
