@@ -38,7 +38,7 @@
     "prettier": "^3.0.3"
   },
   "lint-staged": {
-    "src/**/*.{js}": [
+    "src/**/*.js": [
       "eslint --fix"
     ]
   },
