@@ -3,7 +3,6 @@ import runOnboardingFlow from '../../utils/onboardingFlow.js';
 import MemberDao from '../../database/MemberDao.js';
 
 /**
- *
  * @param member
  */
 export default async function guildMemberAddOnboarding(member) {
@@ -66,7 +65,7 @@ export default async function guildMemberAddOnboarding(member) {
         const publicWelcomeEmbed = new EmbedBuilder()
           .setColor('#4ecdc4')
           .setTitle('신규 회원 인증 안내')
-          .setDescription(`${member} 님, 현재 DM 수신이 차단되어 있어 안내를 보낼 수 없습니다.\n\n개인 설정 > 개인정보 보호에서 “서버 구성원으로부터의 DM 허용”을 켜주시거나, 봇과의 DM을 열어주세요.\nDM에서 \`!인증\`을 입력하면 인증이 ㅈ 시작됩니다.`)
+          .setDescription(`${member} 님, 현재 DM 수신이 차단되어 있어 안내를 보낼 수 없습니다.\n\n개인 설정 > 개인정보 보호에서 “서버 구성원으로부터의 DM 허용”을 켜주시거나, 봇과의 DM을 열어주세요.\nDM에서 \`!인증\`을 입력하면 인증이 절차가 시작됩니다.`)
           .setTimestamp();
         
         await generalChannel.send({ embeds: [publicWelcomeEmbed] });
