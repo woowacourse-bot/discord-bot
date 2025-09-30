@@ -1,4 +1,5 @@
 import { EmbedBuilder } from 'discord.js';
+import runOnboardingFlow from '../../utils/onboardingFlow.js';
 import MemberDao from '../../database/MemberDao.js';
 
 /**
@@ -48,6 +49,9 @@ export default async function guildMemberAddOnboarding(member) {
     try {
       await member.send({ embeds: [welcomeEmbed] });
       console.log(`신규 회원에게 DM 발송 완료: ${member.user.username}`);
+
+      // DM 환영 후 바로 온보딩 시작 (1단계 질문 진행)
+      await runOnboardingFlow(member.user, member);
     } catch (dmError) {
       console.log(`DM 발송 실패 (DM 차단된 듯): ${member.user.username}`);
       
