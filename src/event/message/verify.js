@@ -21,7 +21,9 @@ export default async function verify(message) {
     const dmGuide = new EmbedBuilder()
       .setColor('#ffa726')
       .setTitle('인증 안내')
-      .setDescription('이 명령은 DM에서만 진행됩니다. 봇과의 DM 대화창에서 `!인증`을 입력해 주세요.')
+      .setDescription(
+        '이 명령은 DM에서만 진행됩니다. 봇과의 DM 대화창에서 `!인증`을 입력해 주세요.',
+      )
       .setTimestamp();
     await message.reply({ embeds: [dmGuide] });
     return undefined;
@@ -29,15 +31,22 @@ export default async function verify(message) {
 
   try {
     // DM에서 명령 수신 즉시 안내 (이벤트 유입 확인용)
-    await message.reply({ embeds: [
-      new EmbedBuilder()
-        .setColor('#4ecdc4')
-        .setTitle('인증 시작')
-        .setDescription('이름과 이메일을 순서대로 여쭤볼게요. 각 단계는 20초 내에 응답해주세요.')
-        .setTimestamp()
-    ]});
+    await message.reply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor('#4ecdc4')
+          .setTitle('인증 시작')
+          .setDescription(
+            '지원하실 때 입력하신 이름과 이메일을 순서대로 여쭤볼게요. 각 단계는 20초 내에 응답해주세요.',
+          )
+          .setTimestamp(),
+      ],
+    });
     // eslint-disable-next-line no-console
-    console.log('[VERIFY][DM] command received', { userId: message.author.id, content: message.content });
+    console.log('[VERIFY][DM] command received', {
+      userId: message.author.id,
+      content: message.content,
+    });
 
     // DM 컨텍스트: 먼저 이미 인증된 회원인지 확인
     const existing = await MemberDao.findByDiscordId(message.author.id);
@@ -53,7 +62,8 @@ export default async function verify(message) {
       const guild = await message.client.guilds.fetch(process.env.SERVER_ID);
       const member = await guild.members.fetch(message.author.id).catch(() => null);
       const role = process.env.ONBOARDING_ROLE_ID
-        ? (guild.roles.cache.get(process.env.ONBOARDING_ROLE_ID) || await guild.roles.fetch(process.env.ONBOARDING_ROLE_ID).catch(() => null))
+        ? guild.roles.cache.get(process.env.ONBOARDING_ROLE_ID) ||
+          (await guild.roles.fetch(process.env.ONBOARDING_ROLE_ID).catch(() => null))
         : null;
       if (member && role && !member.roles.cache.has(role.id)) {
         await member.roles.add(role, 'Verified user role reconciliation');
