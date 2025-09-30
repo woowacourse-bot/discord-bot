@@ -15,6 +15,11 @@ export default async function verify(message) {
   if (!message.content.startsWith('!인증')) {
     return undefined;
   }
+  
+  // DM에서 !인증 명령 수신 확인용 로그
+  if (!message.guild) {
+    console.log(`[VERIFY] DM command from ${message.author.username}: "${message.content}"`);
+  }
 
   // 길드 채널에서 호출되면 DM으로 안내
   if (message.guild) {
