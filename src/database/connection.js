@@ -7,9 +7,9 @@ const dbConfig = {
   password: process.env.MYSQL_PASSWORD || '',
   database: process.env.MYSQL_DATABASE || 'precourse',
   waitForConnections: true,
-  connectionLimit: 60, 
+  connectionLimit: 80, 
   queueLimit: 400, 
-  connectTimeout: 10000, // 연결 타임아웃 10초
+  connectTimeout: 5000, // 연결 타임아웃 5초
 };
 
 const pool = mysql.createPool(dbConfig);
