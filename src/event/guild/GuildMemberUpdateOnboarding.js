@@ -57,12 +57,11 @@ export default async function guildMemberUpdateOnboarding(oldMember, newMember) 
         // eslint-disable-next-line no-console
         console.log(`온보딩 완료 DM 발송 실패 (DM 차단된 듯): ${newMember.user.username}`);
 
-        // DM 실패시 인증 채널에 멘션으로 안내
+        // DM 실패시 인증 채널에 멘션으로 안내 (7기-운영진/인증공지)
         const generalChannel = newMember.guild.channels.cache.find((channel) => {
-          const inTarget = channel.name.includes('인증');
-          const inSelfBuildCategory =
-            channel.parent && channel.parent.name && channel.parent.name.includes('스스로만들기');
-          return inTarget && !inSelfBuildCategory;
+          const isTargetName = channel.name === '인증공지';
+          const inTargetCategory = channel.parent && channel.parent.name === '7기-운영진';
+          return isTargetName && inTargetCategory && channel.isTextBased();
         });
 
         if (generalChannel) {

@@ -1,4 +1,6 @@
+import { EmbedBuilder } from 'discord.js';
 import MemberDao from '../database/MemberDao.js';
+import RoleAssignmentFailureDao from '../database/RoleAssignmentFailureDao.js';
 import { sleep, retryWithBackoff } from './retry.js';
 
 const QUESTIONS = [
@@ -139,8 +141,43 @@ const runOnboardingFlow = async (user, memberOrGuild) => {
             const role =
               guild.roles.cache.get(roleId) || (await guild.roles.fetch(roleId).catch(() => null));
             if (role) {
-              await sleep(10 + Math.random() * 40);
-              await retryWithBackoff(() => member.roles.add(role, 'Verified via DM onboarding'));
+              try {
+                await sleep(10 + Math.random() * 40);
+                await retryWithBackoff(() => member.roles.add(role, 'Verified via DM onboarding'));
+              } catch (roleError) {
+                // 실패 기록 저장
+                await RoleAssignmentFailureDao.create({
+                  memberId: found.id,
+                  discordId: user.id,
+                  roleId,
+                  errorMessage: roleError?.message || 'Role assignment failed',
+                }).catch(() => {});
+
+                // 인증 채널 공지: 7기-운영진 카테고리의 인증공지 채널로 한정
+                const authChannel = guild.channels.cache.find((channel) => {
+                  const isTargetName = channel.name === '인증공지';
+                  const inTargetCategory =
+                    channel.parent && channel.parent.name === '7기-운영진';
+                  return isTargetName && inTargetCategory && channel.isTextBased();
+                });
+
+                if (authChannel) {
+                  const embed = new EmbedBuilder()
+                    .setColor('#ff6b6b')
+                    .setTitle('⚠️ 역할 부여 실패 알림')
+                    .setDescription(
+                      `<@${user.id}> 님의 인증은 완료되었으나 역할 부여에 실패했습니다. 운영진 확인이 필요합니다.`,
+                    )
+                    .addFields(
+                      { name: '이름', value: found.name || '알 수 없음', inline: true },
+                      { name: '이메일', value: found.email || '알 수 없음', inline: true },
+                      { name: '역할 ID', value: roleId, inline: true },
+                    )
+                    .setTimestamp();
+
+                  await authChannel.send({ embeds: [embed] }).catch(() => {});
+                }
+              }
             }
           }
         }

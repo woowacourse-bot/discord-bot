@@ -19,12 +19,11 @@ export default async function notifyRoleFailures(client) {
       return;
     }
 
-    // 인증 채널 찾기 (스스로만들기 카테고리 제외)
+    // 인증 채널 찾기: 7기-운영진 카테고리의 인증공지 채널
     const authChannel = guild.channels.cache.find((channel) => {
-      const isAuthChannel = channel.name.includes('인증');
-      const inSelfBuildCategory =
-        channel.parent && channel.parent.name && channel.parent.name.includes('스스로만들기');
-      return isAuthChannel && !inSelfBuildCategory && channel.isTextBased();
+      const isTargetName = channel.name === '인증공지';
+      const inTargetCategory = channel.parent && channel.parent.name === '7기-운영진';
+      return isTargetName && inTargetCategory && channel.isTextBased();
     });
 
     if (!authChannel) {
