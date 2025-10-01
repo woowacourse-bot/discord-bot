@@ -1,6 +1,13 @@
 import pool from './connection.js';
 
 const MemberDao = {
+  async findByName(name) {
+    const [rows] = await pool.query(
+      'SELECT id, name, email, discord_id AS discordId, verified FROM members WHERE name = ? LIMIT 1',
+      [name],
+    );
+    return rows[0] || null;
+  },
   async findByDiscordId(discordId) {
     const [rows] = await pool.query(
       'SELECT id, name, email, discord_id AS discordId, verified FROM members WHERE discord_id = ? LIMIT 1',

@@ -42,6 +42,7 @@ const runOnboardingFlow = async (user, memberOrGuild) => {
   let step = 1; // 1: 이름 수집, 2: 이메일 수집
   let name = '';
   let email = '';
+  let foundMember = null; // 즉시 검증에서 조회한 멤버 캐시
   let invalidAttempts = 0;
 
   await retryWithBackoff(() => dm.send(QUESTIONS[0]));
@@ -79,6 +80,23 @@ const runOnboardingFlow = async (user, memberOrGuild) => {
           );
           return;
         }
+        // DB에 존재하는 이름인지 즉시 검증
+        const exists = await MemberDao.findByName(content);
+        if (!exists) {
+          invalidAttempts += 1;
+          if (invalidAttempts >= MAX_INVALID_ATTEMPTS) {
+            await triggerCooldownAndExit();
+            return;
+          }
+          await retryWithBackoff(() =>
+            dm.send(
+              `등록된 이름을 찾을 수 없습니다. 다시 입력해주세요. (남은 시도: ${
+                MAX_INVALID_ATTEMPTS - invalidAttempts
+              }회)`,
+            ),
+          );
+          return;
+        }
         name = content;
         step = 2;
         await retryWithBackoff(() => dm.send(QUESTIONS[1]));
@@ -103,23 +121,30 @@ const runOnboardingFlow = async (user, memberOrGuild) => {
           );
           return; // 재입력 유도, 단계 유지
         }
-        email = candidate;
-
-        // 수집 완료 → 검증 및 바인딩 진행
-        collector.stop();
-
-        const found = await MemberDao.findByNameEmail(name, email);
-        if (!found) {
+        // 이름과 매칭되는 이메일인지 즉시 검증
+        const match = await MemberDao.findByNameEmail(name, candidate);
+        if (!match) {
+          invalidAttempts += 1;
+          if (invalidAttempts >= MAX_INVALID_ATTEMPTS) {
+            await triggerCooldownAndExit();
+            return;
+          }
           await retryWithBackoff(() =>
             dm.send(
-              '등록된 이름/이메일을 찾을 수 없어요. 입력값을 다시 확인하시거나 운영진에게 문의해 주세요.',
+              `등록된 이름/이메일 조합을 찾을 수 없습니다. 이메일을 다시 입력해주세요. (남은 시도: ${
+                MAX_INVALID_ATTEMPTS - invalidAttempts
+              }회)`,
             ),
           );
-          resolve({ ok: false, reason: 'not_found' });
-          return;
+          return; // 재입력 유도, 단계 유지
         }
+        email = candidate;
+        foundMember = match;
 
-        const ok = await MemberDao.verifyAndBindDiscordId(found.id, user.id);
+        // 수집 완료 → 검증 및 바인딩 진행 (이미 즉시 검증을 통과함)
+        collector.stop();
+
+        const ok = await MemberDao.verifyAndBindDiscordId(foundMember.id, user.id);
         if (!ok) {
           await retryWithBackoff(() =>
             dm.send(
@@ -147,7 +172,7 @@ const runOnboardingFlow = async (user, memberOrGuild) => {
               } catch (roleError) {
                 // 실패 기록 저장
                 await RoleAssignmentFailureDao.create({
-                  memberId: found.id,
+                  memberId: foundMember.id,
                   discordId: user.id,
                   roleId,
                   errorMessage: roleError?.message || 'Role assignment failed',
@@ -169,8 +194,8 @@ const runOnboardingFlow = async (user, memberOrGuild) => {
                       `<@${user.id}> 님의 인증은 완료되었으나 역할 부여에 실패했습니다. 운영진 확인이 필요합니다.`,
                     )
                     .addFields(
-                      { name: '이름', value: found.name || '알 수 없음', inline: true },
-                      { name: '이메일', value: found.email || '알 수 없음', inline: true },
+                      { name: '이름', value: foundMember.name || '알 수 없음', inline: true },
+                      { name: '이메일', value: foundMember.email || '알 수 없음', inline: true },
                       { name: '역할 ID', value: roleId, inline: true },
                     )
                     .setTimestamp();
