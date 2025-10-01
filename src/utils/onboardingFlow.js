@@ -20,7 +20,11 @@ const runOnboardingFlow = async (user, memberOrGuild) => {
     const remainingMs = until - now;
     const remainingMin = Math.ceil(remainingMs / 60000);
     const dmEarly = await user.createDM();
-    await retryWithBackoff(() => dmEarly.send(`최근 여러 번 잘못된 입력이 감지되어 일시적으로 인증이 제한되었습니다. 약 ${remainingMin}분 후에 다시 시도해주세요.`));
+    await retryWithBackoff(() =>
+      dmEarly.send(
+        `최근 여러 번 잘못된 입력이 감지되어 일시적으로 인증이 제한되었습니다. 약 ${remainingMin}분 후에 다시 시도해주세요.`,
+      ),
+    );
     return { ok: false, reason: 'cooldown' };
   }
 
@@ -44,7 +48,11 @@ const runOnboardingFlow = async (user, memberOrGuild) => {
     const triggerCooldownAndExit = async () => {
       const untilTs = Date.now() + COOLDOWN_MINUTES * 60000;
       cooldownUntilByUser.set(user.id, untilTs);
-      await retryWithBackoff(() => dm.send(`잘못된 입력이 ${MAX_INVALID_ATTEMPTS}회를 초과했습니다. 약 ${COOLDOWN_MINUTES}분 후에 DM에서 \`!인증\`을 다시 입력해 주세요.`));
+      await retryWithBackoff(() =>
+        dm.send(
+          `잘못된 입력이 ${MAX_INVALID_ATTEMPTS}회를 초과했습니다. 약 ${COOLDOWN_MINUTES}분 후에 DM에서 \`!인증\`을 다시 입력해 주세요.`,
+        ),
+      );
       collector.stop();
       resolve({ ok: false, reason: 'cooldown' });
     };
@@ -60,7 +68,13 @@ const runOnboardingFlow = async (user, memberOrGuild) => {
             await triggerCooldownAndExit();
             return;
           }
-          await retryWithBackoff(() => dm.send(`이름이 너무 짧습니다. 다시 입력해주세요. (남은 시도: ${MAX_INVALID_ATTEMPTS - invalidAttempts}회)`));
+          await retryWithBackoff(() =>
+            dm.send(
+              `이름이 너무 짧습니다. 다시 입력해주세요. (남은 시도: ${
+                MAX_INVALID_ATTEMPTS - invalidAttempts
+              }회)`,
+            ),
+          );
           return;
         }
         name = content;
@@ -78,7 +92,13 @@ const runOnboardingFlow = async (user, memberOrGuild) => {
             await triggerCooldownAndExit();
             return;
           }
-          await retryWithBackoff(() => dm.send(`이메일 형식이 올바르지 않습니다. 예: hong@example.com\n다시 입력해주세요. (남은 시도: ${MAX_INVALID_ATTEMPTS - invalidAttempts}회)`));
+          await retryWithBackoff(() =>
+            dm.send(
+              `이메일 형식이 올바르지 않습니다. 예: hong@example.com\n다시 입력해주세요. (남은 시도: ${
+                MAX_INVALID_ATTEMPTS - invalidAttempts
+              }회)`,
+            ),
+          );
           return; // 재입력 유도, 단계 유지
         }
         email = candidate;
@@ -88,14 +108,22 @@ const runOnboardingFlow = async (user, memberOrGuild) => {
 
         const found = await MemberDao.findByNameEmail(name, email);
         if (!found) {
-          await retryWithBackoff(() => dm.send('등록된 이름/이메일을 찾을 수 없어요. 입력값을 다시 확인하시거나 운영진에게 문의해 주세요.'));
+          await retryWithBackoff(() =>
+            dm.send(
+              '등록된 이름/이메일을 찾을 수 없어요. 입력값을 다시 확인하시거나 운영진에게 문의해 주세요.',
+            ),
+          );
           resolve({ ok: false, reason: 'not_found' });
           return;
         }
 
         const ok = await MemberDao.verifyAndBindDiscordId(found.id, user.id);
         if (!ok) {
-          await retryWithBackoff(() => dm.send('인증 처리 중 일시적인 오류가 발생했습니다. 잠시 후 `!인증`을 다시 입력해 재시도해 주세요. (CODE: 99)'));
+          await retryWithBackoff(() =>
+            dm.send(
+              '인증 처리 중 일시적인 오류가 발생했습니다. 잠시 후 `!인증`을 다시 입력해 재시도해 주세요. (CODE: 99)',
+            ),
+          );
           resolve({ ok: false, reason: 'db' });
           return;
         }
@@ -104,9 +132,12 @@ const runOnboardingFlow = async (user, memberOrGuild) => {
         const roleId = process.env.ONBOARDING_ROLE_ID;
         if (roleId && memberOrGuild) {
           const guild = memberOrGuild.guild || memberOrGuild;
-          const member = memberOrGuild.guild ? memberOrGuild : await guild.members.fetch(user.id).catch(() => null);
+          const member = memberOrGuild.guild
+            ? memberOrGuild
+            : await guild.members.fetch(user.id).catch(() => null);
           if (guild && member) {
-            const role = guild.roles.cache.get(roleId) || await guild.roles.fetch(roleId).catch(() => null);
+            const role =
+              guild.roles.cache.get(roleId) || (await guild.roles.fetch(roleId).catch(() => null));
             if (role) {
               await sleep(10 + Math.random() * 40);
               await retryWithBackoff(() => member.roles.add(role, 'Verified via DM onboarding'));
@@ -114,14 +145,22 @@ const runOnboardingFlow = async (user, memberOrGuild) => {
           }
         }
 
-        await retryWithBackoff(() => dm.send('✅ 인증이 완료되었습니다! 잠시 후 서버에서 필요한 역할이 부여됩니다. 환영합니다.'));
+        await retryWithBackoff(() =>
+          dm.send(
+            '✅ 인증이 완료되었습니다!. 이제 프리코스 서버에서 자유롭게 활동하실 수 있습니다.',
+          ),
+        );
         resolve({ ok: true });
       }
     });
 
     collector.on('end', async () => {
       if (!email && invalidAttempts < MAX_INVALID_ATTEMPTS) {
-        await retryWithBackoff(() => dm.send('⏳ 입력 시간이 초과되었습니다. DM에서 `!인증`을 다시 입력해 처음부터 진행해 주세요.'));
+        await retryWithBackoff(() =>
+          dm.send(
+            '⏳ 입력 시간이 초과되었습니다. DM에서 `!인증`을 다시 입력해 처음부터 진행해 주세요.',
+          ),
+        );
         resolve({ ok: false, reason: 'timeout' });
       }
     });
