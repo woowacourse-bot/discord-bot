@@ -11,6 +11,10 @@ export default async function guildMemberUpdateOnboarding(oldMember, newMember) 
     // 봇은 제외
     if (newMember.user.bot) return;
 
+    // 디버깅: 모든 guildMemberUpdate 이벤트 로그
+    // eslint-disable-next-line no-console
+    console.log(`[DEBUG] GuildMemberUpdate: ${newMember.user.username} - pending: ${oldMember.pending} → ${newMember.pending}`);
+
     // pending 상태가 true에서 false로 변경된 경우 (온보딩 완료)
     if (oldMember.pending && !newMember.pending) {
       // eslint-disable-next-line no-console
