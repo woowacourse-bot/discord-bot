@@ -59,8 +59,8 @@ export default async function guildMemberUpdateOnboarding(oldMember, newMember) 
 
         // DM 실패시 인증 채널에 멘션으로 안내 (7기-운영진/인증공지)
         const generalChannel = newMember.guild.channels.cache.find((channel) => {
-          const isTargetName = channel.name === '인증공지';
-          const inTargetCategory = channel.parent && channel.parent.name === '7기-운영진';
+          const isTargetName = channel.name === '인증';
+          const inTargetCategory = channel.parent && channel.parent.name !== '스스로 만들기';
           return isTargetName && inTargetCategory && channel.isTextBased();
         });
 
@@ -69,7 +69,7 @@ export default async function guildMemberUpdateOnboarding(oldMember, newMember) 
             .setColor('#4ecdc4')
             .setTitle('신규 회원 인증 안내')
             .setDescription(
-              `${newMember} 님, 온보딩을 완료하셨습니다! 🎉\n\n현재 DM 수신이 차단되어 있어 안내를 보낼 수 없습니다.\n\n개인 설정 > 개인정보 보호에서 "서버 구성원으로부터의 DM 허용"을 켜주시거나, 봇과의 DM을 열어주세요.\nDM에서 \`!인증\`을 입력하면 인증 절차가 시작됩니다.`,
+              `${newMember} 님, 현재 DM 수신이 차단되어 있어 안내를 보낼 수 없습니다.\n\n개인 설정 > 개인정보 보호에서 "서버 구성원으로부터의 DM 허용"을 켜주시거나, 봇과의 DM을 열어주세요.\nDM에서 \`!인증\`을 입력하면 인증 절차가 시작됩니다.`,
             )
             .setTimestamp();
 
