@@ -13,7 +13,9 @@ export default async function guildMemberUpdateOnboarding(oldMember, newMember) 
 
     // 디버깅: 모든 guildMemberUpdate 이벤트 로그
     // eslint-disable-next-line no-console
-    console.log(`[DEBUG] GuildMemberUpdate: ${newMember.user.username} - pending: ${oldMember.pending} → ${newMember.pending}`);
+    console.log(
+      `[DEBUG] GuildMemberUpdate: ${newMember.user.username} - pending: ${oldMember.pending} → ${newMember.pending}`,
+    );
 
     // pending 상태가 true에서 false로 변경된 경우 (온보딩 완료)
     if (oldMember.pending && !newMember.pending) {
@@ -69,16 +71,16 @@ export default async function guildMemberUpdateOnboarding(oldMember, newMember) 
             .setColor('#4ecdc4')
             .setTitle('신규 회원 인증 안내')
             .setDescription(
-              `${newMember} 님, 현재 DM 수신이 차단되어 있어 안내를 보낼 수 없습니다.\n\n개인 설정 > 개인정보 보호에서 "서버 구성원으로부터의 DM 허용"을 켜주시거나, 봇과의 DM을 열어주세요.\nDM에서 \`!인증\`을 입력하면 인증 절차가 시작됩니다.`,
+              `${newMember} 님, 현재 DM 수신이 차단되어 있어 안내를 보낼 수 없습니다.\n\n 왼쪽 바에서 우테코 서버 아이콘을 오른쪽 클릭 > 개인정보 보호 설정 클릭 > 다이렉트 메시지 on \nDM에서 \`!인증\`을 입력하면 인증 절차가 시작됩니다.`,
             )
             .setTimestamp();
 
-          await retryWithBackoff(() =>
-            generalChannel.send({ embeds: [publicWelcomeEmbed] }),
-          ).catch((err) => {
-            // eslint-disable-next-line no-console
-            console.error('인증 채널 메시지 발송 실패:', err);
-          });
+          await retryWithBackoff(() => generalChannel.send({ embeds: [publicWelcomeEmbed] })).catch(
+            (err) => {
+              // eslint-disable-next-line no-console
+              console.error('인증 채널 메시지 발송 실패:', err);
+            },
+          );
         }
       }
     }
@@ -87,4 +89,3 @@ export default async function guildMemberUpdateOnboarding(oldMember, newMember) 
     console.error('온보딩 완료 처리 중 오류:', error);
   }
 }
-
