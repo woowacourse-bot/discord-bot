@@ -61,9 +61,9 @@ export default async function guildMemberUpdateOnboarding(oldMember, newMember) 
 
         // DM 실패시 인증 채널에 멘션으로 안내 (7기-운영진/인증공지)
         const generalChannel = newMember.guild.channels.cache.find((channel) => {
-          const isTargetName = channel.name === '인증';
-          const inTargetCategory = channel.parent && channel.parent.name !== '스스로 만들기';
-          return isTargetName && inTargetCategory && channel.isTextBased();
+          const isTargetName = channel.name.includes('인증');
+          const inAuthCategory = channel.parent && channel.parent.name && channel.parent.name.includes('인증');
+          return isTargetName && inAuthCategory && channel.isTextBased();
         });
 
         if (generalChannel) {
