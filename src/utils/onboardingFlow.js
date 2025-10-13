@@ -76,7 +76,7 @@ const runOnboardingFlow = async (user, memberOrGuild) => {
       return { ok: false, reason: 'timeout_name' };
     }
 
-    if (content.length < 2) {
+    if (content.length < 1) {
       invalidAttempts += 1;
       if (invalidAttempts >= MAX_INVALID_ATTEMPTS) return await triggerCooldownAndExit();
       await retryWithBackoff(() =>
