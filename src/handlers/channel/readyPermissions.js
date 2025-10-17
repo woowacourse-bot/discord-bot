@@ -51,10 +51,20 @@ const readyPermissions = async (client) => {
 
         // 특정 역할에 대한 권한 제거 (역할 ID로 직접 접근)
         const specificRole = guild.roles.cache.get('1422476606202445845');
+        console.log(
+          `역할 찾기 결과:`,
+          specificRole ? `찾음 - ${specificRole.name}` : '찾을 수 없음',
+        );
+
         if (specificRole) {
-          await channel.permissionOverwrites.edit(specificRole, {
-            ManageChannels: false,
-          });
+          try {
+            await channel.permissionOverwrites.edit(specificRole, {
+              ManageChannels: false,
+            });
+            console.log(`✅ 채널 ${channel.name}에서 역할 ${specificRole.name}의 권한 제거 완료`);
+          } catch (error) {
+            console.error(`❌ 권한 제거 실패:`, error.message);
+          }
         }
       } catch (error) {
         console.error(`Error setting permissions for channel ${channel.name}:`, error);
