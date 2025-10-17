@@ -49,8 +49,8 @@ const readyPermissions = async (client) => {
           ManageChannels: false,
         });
 
-        // 특정 역할에 대한 권한 제거 (역할 이름으로 찾기)
-        const specificRole = guild.roles.cache.find(role => role.name === '지원자');
+        // 특정 역할에 대한 권한 제거 (역할 ID로 직접 접근)
+        const specificRole = guild.roles.cache.get('역할ID를여기에입력하세요');
         if (specificRole) {
           await channel.permissionOverwrites.edit(specificRole, {
             ManageChannels: false,
