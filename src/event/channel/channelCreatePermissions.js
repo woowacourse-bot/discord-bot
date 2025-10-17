@@ -37,6 +37,24 @@ const channelCreatePermissions = async (channel, client) => {
       ManageChannels: false,
     });
 
+    // 특정 역할에 대한 권한 제거 (역할 ID로 직접 접근)
+    const specificRole = channel.guild.roles.cache.get('1422476606202445845');
+    console.log(
+      `역할 찾기 결과:`,
+      specificRole ? `찾음 - ${specificRole.name}` : '찾을 수 없음',
+    );
+
+    if (specificRole) {
+      try {
+        await channel.permissionOverwrites.edit(specificRole, {
+          ManageChannels: false,
+        });
+        console.log(`✅ 채널 ${channel.name}에서 역할 ${specificRole.name}의 권한 제거 완료`);
+      } catch (error) {
+        console.error(`❌ 권한 제거 실패:`, error.message);
+      }
+    }
+
     console.log(`\n권한 수정 완료됨.`);
     console.log(`권한 수정 채널명: ${channel.name}`);
     console.log(`수정 시각: ${new Date()}`);
