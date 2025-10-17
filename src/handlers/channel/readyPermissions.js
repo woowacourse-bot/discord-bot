@@ -48,6 +48,14 @@ const readyPermissions = async (client) => {
         await channel.permissionOverwrites.edit(guild.roles.everyone, {
           ManageChannels: false,
         });
+
+        // 특정 역할에 대한 권한 제거 (역할 이름으로 찾기)
+        const specificRole = guild.roles.cache.find(role => role.name === '지원자');
+        if (specificRole) {
+          await channel.permissionOverwrites.edit(specificRole, {
+            ManageChannels: false,
+          });
+        }
       } catch (error) {
         console.error(`Error setting permissions for channel ${channel.name}:`, error);
       }
